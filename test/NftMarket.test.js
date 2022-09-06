@@ -94,7 +94,7 @@ contract("NftMarket", accounts => {
             assert.equal(totalSupply.toNumber(), 2, "Total supply of token is not correct");
         });
 
-        it("should be able to retreive nft by index", async () => {
+        it("should be able to retrieve nft by index", async () => {
             const nftId1 = await _contract.tokenByIndex(0);
             const nftId2 = await _contract.tokenByIndex(1);
 
