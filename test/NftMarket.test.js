@@ -106,5 +106,57 @@ contract("NftMarket", accounts => {
             const allNfts = await _contract.getAllNftsOnSale();
             assert.equal(allNfts[0].tokenId, 2, "Nft has a wrong id");
         });
+
+        it("account[1] should have one owned NFT", async () => {
+            const ownedNfts = await _contract.getOwnedNfts({ from: accounts[1] });
+            assert.equal(ownedNfts[0].tokenId, 1, "Nft has a wrong id");
+        });
+
+        it("account[0] should have one owned NFT", async () => {
+            const ownedNfts = await _contract.getOwnedNfts({ from: accounts[0] });
+            assert.equal(ownedNfts[0].tokenId, 2, "Nft has a wrong id");
+        });
+    });
+
+    describe("Token transfer to new owner", () => {
+        before(async () => {
+            await _contract.transferFrom(
+                accounts[0],
+                accounts[1],
+                2
+            );
+        });
+
+        it("accounts[0] should own 0 tokens", async () => {
+            const ownedNfts = await _contract.getOwnedNfts({ from: accounts[0] });
+            assert.equal(ownedNfts.length, 0, "Invalid length of tokens");
+        });
+
+        it("accounts[1] should own 2 tokens", async () => {
+            const ownedNfts = await _contract.getOwnedNfts({ from: accounts[1] });
+            assert.equal(ownedNfts.length, 2, "Invalid length of tokens");
+        });
+    });
+
+    describe("Burn Token", () => {
+        const tokenURI = "https://test-json3.com";
+        before(async () => {
+            await _contract.mintToken(tokenURI, _nftPrice, {
+                from: accounts[2],
+                value: _listingPrice
+            });
+        });
+
+        it("account[2] should have one owned NFT", async () => {
+            const ownedNfts = await _contract.getOwnedNfts({ from: accounts[2] });
+            assert.equal(ownedNfts[0].tokenId, 3, "Nft has a wrong id");
+        });
+
+        it("account[2] should own 0 NFTs", async () => {
+            await _contract.burnToken(3, { from: accounts[2] });
+            const ownedNfts = await _contract.getOwnedNfts({ from: accounts[2] });
+
+            assert.equal(ownedNfts.length, 0, "Invalid length of tokens");
+        });
     });
 });
