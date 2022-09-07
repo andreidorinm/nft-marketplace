@@ -2,6 +2,7 @@
   "cSpell.words": [
     "anymatch",
     "argparse",
+    "Arrayish",
     "autoprefixer",
     "axobject",
     "basex",
@@ -65,7 +66,9 @@
     "minimatch",
     "minimist",
     "msvc",
+    "Nftitem",
     "nodelib",
+    "Numberish",
     "optionator",
     "picocolors",
     "picomatch",
